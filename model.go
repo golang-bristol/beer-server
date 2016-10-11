@@ -13,12 +13,12 @@ type Review struct {
 }
 
 type Beer struct {
-	Id         int      `json:"id"`
-	Name       string   `json:"name"`
-	Brewery    string   `json:"brewery"`
-	Abv        int      `json:"abv"`
-	Short_desc string   `json:"short_description"`
-	Created    tim.Time `json:"created"`
+	Id         int       `json:"id"`
+	Name       string    `json:"name"`
+	Brewery    string    `json:"brewery"`
+	Abv        int       `json:"abv"`
+	Short_desc string    `json:"short_description"`
+	Created    time.Time `json:"created"`
 }
 
 type Beers []Beer
