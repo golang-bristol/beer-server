@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
@@ -16,5 +17,16 @@ func GetBeers(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 // AddBeer ... Add a new beer to the cellar.
 func AddBeer(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode("New beer added.")
+
+	decoder := json.NewDecoder(r.Body)
+
+	var newBeer Beer
+	err := decoder.Decode(&newBeer)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(http.StatusBadRequest)
+		fmt.Println("Bad beer - this will be a HTTP status code soon!")
+	} else {
+		json.NewEncoder(w).Encode("New beer added.")
+	}
 }
