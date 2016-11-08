@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
+	"github.com/golang-bristol/beer-model"
 )
 
 // GetBeers ... Returns the cellar.
@@ -20,7 +21,7 @@ func AddBeer(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 	decoder := json.NewDecoder(r.Body)
 
-	var newBeer Beer
+	var newBeer model.Beer
 	err := decoder.Decode(&newBeer)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)

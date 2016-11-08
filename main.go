@@ -6,11 +6,12 @@ import (
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
+	"github.com/golang-bristol/beer-model"
 )
 
 var (
 	// Cellar ... The collection of beer.
-	Cellar Beers
+	Cellar model.Beers
 )
 
 func main() {
