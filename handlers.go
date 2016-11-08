@@ -31,7 +31,16 @@ func AddBeer(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(http.StatusBadRequest)
 		fmt.Println("Bad beer - this will be a HTTP status code soon!")
-	} else {
-		json.NewEncoder(w).Encode("New beer added.")
+		return
 	}
+
+	err = newBeer.Persist()
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(http.StatusBadRequest)
+		fmt.Println("Bad beer - this will be a HTTP status code soon!")
+		return
+	}
+
+	json.NewEncoder(w).Encode("New beer added.")
 }

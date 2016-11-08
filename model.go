@@ -31,8 +31,24 @@ type Beer struct {
 // Beers is 0 or more beers
 type Beers []Beer
 
+// Persist to the database.
+func (b Beer) Persist() error {
+	// New
+	if b.ID == 0 {
+		_, err := DB.Exec("insert into beers (name) values(?)",
+			b.ID)
+		return err
+	}
+
+	// Existing
+	_, err := DB.Exec("update beers set Name=? where ID=?",
+		b.Name, b.ID)
+
+	return err
+}
+
 // ListBeers gets all beers
-func ListBeers() (beers []Beer, err error) {
+func ListBeers() (beers Beers, err error) {
 	err = DB.Select(&beers, "select * from beers where DeletedAt is null")
 	if err != nil {
 		return nil, err
