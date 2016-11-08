@@ -1,26 +1,34 @@
 package main
 
-import (
-	"database/sql"
-	"time"
-)
+import "database/sql"
 
 // Review represents a single review
 type Review struct {
-	ID        int       `json:"id"`
-	BeerID    int       `json:"beer_id"`
-	FirstName string    `json:"first_name"`
-	LastName  string    `json:"last_name"`
-	Score     int       `json:"score"`
-	Text      string    `json:"text"`
-	Created   time.Time `json:"created"`
+	ID        int            `json:"id" db:"ID"`
+	Beer      int            `json:"beer_id" db:"Beer"`
+	Name      string         `json:"name" db:"Name"`
+	Score     int            `json:"score" db:"Score"`
+	Text      sql.NullString `json:"text" db:"Text"`
+	CreatedAt []uint8        `json:"created" db:"CreatedAt"`
+	UpdatedAt []uint8        `json:"created" db:"UpdatedAt"`
+	DeletedAt sql.NullInt64  `json:"created" db:"DeletedAt"`
+}
+
+// Brewery represents a single brewery
+type Brewery struct {
+	ID        int            `json:"id" db:"ID"`
+	Name      string         `json:"name" db:"Name"`
+	Location  sql.NullString `json:"location" db:"Location"`
+	CreatedAt []uint8        `json:"created" db:"CreatedAt"`
+	UpdatedAt []uint8        `json:"created" db:"UpdatedAt"`
+	DeletedAt sql.NullInt64  `json:"created" db:"DeletedAt"`
 }
 
 // Beer represents a single beer
 type Beer struct {
 	ID        int            `json:"id" db:"ID"`
 	Name      string         `json:"name" db:"Name"`
-	Brewery   sql.NullString `json:"brewery" db:"Brewery"`
+	Brewery   sql.NullInt64  `json:"brewery" db:"Brewery"`
 	ABV       sql.NullInt64  `json:"abv" db:"ABV"`
 	ShortDesc sql.NullString `json:"short_description" db:"ShortDesc"`
 	CreatedAt []uint8        `json:"created" db:"CreatedAt"`
