@@ -1,24 +1,41 @@
 package main
 
-import "time"
+import (
+	"database/sql"
+	"time"
+)
 
+// Review represents a single review
 type Review struct {
-	Id         int       `json:"id"`
-	Beer_id    int       `json:"beer_id"`
-	First_name string    `json:"first_name"`
-	Last_name  string    `json:"last_name"`
-	Score      int       `json:"score"`
-	Text       string    `json:"text"`
-	Created    time.Time `json:"created"`
+	ID        int       `json:"id"`
+	BeerID    int       `json:"beer_id"`
+	FirstName string    `json:"first_name"`
+	LastName  string    `json:"last_name"`
+	Score     int       `json:"score"`
+	Text      string    `json:"text"`
+	Created   time.Time `json:"created"`
 }
 
+// Beer represents a single beer
 type Beer struct {
-	Id         int       `json:"id"`
-	Name       string    `json:"name"`
-	Brewery    string    `json:"brewery"`
-	Abv        int       `json:"abv"`
-	Short_desc string    `json:"short_description"`
-	Created    time.Time `json:"created"`
+	ID        int            `json:"id" db:"ID"`
+	Name      string         `json:"name" db:"Name"`
+	Brewery   sql.NullString `json:"brewery" db:"Brewery"`
+	ABV       sql.NullInt64  `json:"abv" db:"ABV"`
+	ShortDesc sql.NullString `json:"short_description" db:"ShortDesc"`
+	CreatedAt []uint8        `json:"created" db:"CreatedAt"`
+	UpdatedAt []uint8        `json:"created" db:"UpdatedAt"`
+	DeletedAt sql.NullInt64  `json:"created" db:"DeletedAt"`
 }
 
+// Beers is 0 or more beers
 type Beers []Beer
+
+// ListBeers gets all beers
+func ListBeers() (beers []Beer, err error) {
+	err = DB.Select(&beers, "select * from beers where DeletedAt is null")
+	if err != nil {
+		return nil, err
+	}
+	return beers, nil
+}

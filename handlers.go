@@ -10,8 +10,13 @@ import (
 
 // GetBeers ... Returns the cellar.
 func GetBeers(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	beers, err := ListBeers()
+	if err != nil {
+		panic(err)
+	}
+
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(Cellar)
+	json.NewEncoder(w).Encode(beers)
 }
 
 // AddBeer ... Add a new beer to the cellar.
