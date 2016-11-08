@@ -2,11 +2,18 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
 )
+
+// JSONError writes a HTTP status code and shows an error message as JSON.
+func JSONError(w http.ResponseWriter, status int, err error) {
+	w.WriteHeader(status)
+	json.NewEncoder(w).Encode(map[string]string{
+		"err": err.Error(),
+	})
+}
 
 // GetBeers ... Returns the cellar.
 func GetBeers(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -28,17 +35,13 @@ func AddBeer(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	var newBeer Beer
 	err := decoder.Decode(&newBeer)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(http.StatusBadRequest)
-		fmt.Println("Bad beer - this will be a HTTP status code soon!")
+		JSONError(w, http.StatusBadRequest, err)
 		return
 	}
 
 	err = newBeer.Persist()
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(http.StatusBadRequest)
-		fmt.Println("Bad beer - this will be a HTTP status code soon!")
+		JSONError(w, http.StatusBadRequest, err)
 		return
 	}
 
