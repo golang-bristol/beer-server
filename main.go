@@ -5,12 +5,12 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/julienschmidt/httprouter"
 	"github.com/golang-bristol/beer-model"
+	"github.com/julienschmidt/httprouter"
 )
 
 var (
-	// Cellar ... The collection of beer.
+	// Cellar ... The collection of beer
 	Cellar model.Beers
 )
 
