@@ -34,9 +34,6 @@ func main() {
 	defer db.Close()
 
 	dbInitialize(db)
-	// dbSeed(db)
-	//PopulateBeers()
-	//PopulateReviews()
 
 	router := httprouter.New()
 
