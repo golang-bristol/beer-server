@@ -38,6 +38,7 @@ func AddBeer(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		json.NewEncoder(w).Encode(http.StatusBadRequest)
 		fmt.Println("Bad beer - this will be a HTTP status code soon!")
 	} else {
+		Cellar = append(Cellar, newBeer)
 		json.NewEncoder(w).Encode("New beer added.")
 	}
 }
