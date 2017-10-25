@@ -23,7 +23,6 @@ func GetBeer(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		return
 	}
 
-	//Ensure we're accessing a valid ID
 	for _, v := range Cellar {
 		if v.ID == ID {
 			w.Header().Set("Content-Type", "application/json")
