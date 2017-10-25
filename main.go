@@ -7,6 +7,9 @@ import (
 
 	model "github.com/golang-bristol/beer-model"
 	"github.com/julienschmidt/httprouter"
+
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
 var (
@@ -17,17 +20,31 @@ var (
 	Reviews []model.Review
 )
 
+func dbInitialize(db *gorm.DB) {
+	if !db.HasTable(&model.Beer{}) {
+		db.CreateTable(model.Beer{})
+	}
+	if !db.HasTable(&model.Review{}) {
+		db.CreateTable(&model.Review{})
+	}
+}
+
 func main() {
-	PopulateBeers()
-	PopulateReviews()
+	db, _ := gorm.Open("sqlite3", "main.db")
+	defer db.Close()
+
+	dbInitialize(db)
+	// dbSeed(db)
+	//PopulateBeers()
+	//PopulateReviews()
 
 	router := httprouter.New()
 
-	router.GET("/beers", GetBeers)
+	router.GET("/beers", GetBeers(db))
 	router.GET("/beers/:id", GetBeer)
 	router.GET("/beers/:id/reviews", GetBeerReviews)
 
-	router.POST("/beers", AddBeer)
+	router.POST("/beers", AddBeer(db))
 	router.POST("/beers/:id/reviews", AddBeerReview)
 
 	fmt.Println("The beer server is on tap now.")
