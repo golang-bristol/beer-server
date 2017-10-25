@@ -1,6 +1,6 @@
 # Beer Server
 
-A web server with the following resources:
+A REST(ish) API offering the following resources:
 
 - `GET /beers` (return a list of beers)
 - `GET /beers/[:id]` (return a single beer)
