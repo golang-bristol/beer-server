@@ -3,6 +3,8 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
+	"math/rand"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -74,6 +76,29 @@ func TestAddBeer(t *testing.T) {
 
 	if _, ok := mapCellar[newBeer]; !ok {
 		t.Errorf("Expected to find new entry in the exported variable `Cellar`")
+		t.FailNow()
+	}
+
+}
+
+func TestGetBeer(t *testing.T) {
+	choice := rand.Intn(len(Cellar) - 1)
+
+	w := httptest.NewRecorder()
+	r, _ := http.NewRequest("GET", fmt.Sprintf("/beers/%d", Cellar[choice].ID), nil)
+
+	router.ServeHTTP(w, r)
+
+	if w.Code != http.StatusOK {
+		t.Errorf("Expected route GET /beers/%d to be valid.", Cellar[choice].ID)
+		t.FailNow()
+	}
+
+	var selectedBeer model.Beer
+	json.Unmarshal(w.Body.Bytes(), &selectedBeer)
+
+	if Cellar[choice] != selectedBeer {
+		t.Errorf("Expected to match results with selected beer")
 		t.FailNow()
 	}
 
