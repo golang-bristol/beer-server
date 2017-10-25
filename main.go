@@ -5,23 +5,31 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/golang-bristol/beer-model"
+	model "github.com/golang-bristol/beer-model"
 	"github.com/julienschmidt/httprouter"
 )
 
 var (
-	// Cellar ... The collection of beer
-	Cellar model.Beers
+	// Cellar is the collection of beers
+	Cellar []model.Beer
+
+	// Reviews is the colletion of beer reviews
+	Reviews []model.Review
 )
 
 func main() {
-	populateBeers()
+	PopulateBeers()
+	PopulateReviews()
 
 	router := httprouter.New()
-	router.GET("/beers", GetBeers)
-	router.POST("/beers", AddBeer)
-	//router.GET("/hello/:name", Hello)
 
-	fmt.Println("The Beer server is on tap now.")
+	router.GET("/beers", GetBeers)
+	router.GET("/beers/:id", GetBeer)
+	router.GET("/beers/:id/reviews", GetBeerReviews)
+
+	router.POST("/beers", AddBeer)
+	router.POST("/beers/:id/reviews", AddBeerReview)
+
+	fmt.Println("The beer server is on tap now.")
 	log.Fatal(http.ListenAndServe(":8080", router))
 }

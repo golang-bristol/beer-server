@@ -5,17 +5,27 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/julienschmidt/httprouter"
 	"github.com/golang-bristol/beer-model"
+	"github.com/julienschmidt/httprouter"
 )
 
-// GetBeers ... Returns the cellar.
+// GetBeers returns the cellar
 func GetBeers(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(Cellar)
 }
 
-// AddBeer ... Add a new beer to the cellar.
+// GetBeer returns a beer from the cellar
+func GetBeer(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	// TODO
+}
+
+// GetBeerReviews returns all reviews for a beer
+func GetBeerReviews(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	// TODO
+}
+
+// AddBeer adds a new beer to the cellar
 func AddBeer(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -30,4 +40,9 @@ func AddBeer(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	} else {
 		json.NewEncoder(w).Encode("New beer added.")
 	}
+}
+
+// AddBeerReview adds a new review for a beer
+func AddBeerReview(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	// TODO
 }

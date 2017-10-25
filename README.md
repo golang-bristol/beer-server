@@ -1,9 +1,10 @@
 # Beer Server
 
-Create a RESTful server with the following routes:
+A web server with the following resources:
 
 - `GET /beers` (return a list of beers)
+- `GET /beers/[:id]` (return a single beer)
+- `GET /beers/[:id]/reviews` (return a list of reviews for beer)
+
 - `POST /beers` (create a new beer)
-- `GET /beer/[:id]` (return a single beer)
-- `GET /beer/[:id]/reviews` (return a list of reviews for beer)
-- `POST /beer/[:id]/review` (create a new review for beer)
+- `POST /beers/[:id]/reviews` (create a new review for beer)
