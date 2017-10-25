@@ -34,7 +34,7 @@ func GetBeer(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	}
 
 	w.WriteHeader(http.StatusNotFound)
-	json.NewEncoder(w).Encode(fmt.Sprintf("The beer you requested does not exist."))
+	json.NewEncoder(w).Encode("The beer you requested does not exist.")
 }
 
 // GetBeerReviews returns all reviews for a beer
