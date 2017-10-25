@@ -17,21 +17,24 @@ func GetBeers(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 // GetBeer returns a beer from the cellar
 func GetBeer(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	w.Header().Set("Content-Type", "application/json")
+
 	ID, err := strconv.Atoi(ps.ByName("id"))
 	if err != nil {
-		fmt.Fprintln(w, ps.ByName("id"), "is not a valid Beer ID, it must be a number.")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(fmt.Sprintf("%s is not a valid Beer ID, it must be a number.", ps.ByName("id")))
 		return
 	}
 
 	for _, v := range Cellar {
 		if v.ID == ID {
-			w.Header().Set("Content-Type", "application/json")
 			json.NewEncoder(w).Encode(v)
 			return
 		}
 	}
 
-	fmt.Fprintln(w, "The beer you requested does not exist.")
+	w.WriteHeader(http.StatusNotFound)
+	json.NewEncoder(w).Encode(fmt.Sprintf("The beer you requested does not exist."))
 }
 
 // GetBeerReviews returns all reviews for a beer
