@@ -1,8 +1,0 @@
-hash: 3844266df06fd9ba1122bb7cda460d6dbb89eb4019455c77d97229a715dfa6a1
-updated: 2017-10-25T01:25:28.708531266+01:00
-imports:
-- name: github.com/golang-bristol/beer-model
-  version: ecec0de6b9cc77b955a8caafaf1fe879495bcd53
-- name: github.com/julienschmidt/httprouter
-  version: 8c199fb6259ffc1af525cc3ad52ee60ba8359669
-testImports: []
