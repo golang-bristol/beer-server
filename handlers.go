@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/golang-bristol/beer-model"
 	"github.com/julienschmidt/httprouter"
@@ -60,6 +61,37 @@ func AddBeer(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 }
 
 // AddBeerReview adds a new review for a beer
-func AddBeerReview(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	// TODO
+func AddBeerReview(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	w.Header().Set("Content-Type", "application/json")
+
+	ID, err := strconv.Atoi(ps.ByName("id"))
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(fmt.Sprintf("%s is not a valid Beer ID, it must be a number.", ps.ByName("id")))
+		return
+	}
+
+	for _, v := range Cellar {
+		if v.ID == ID {
+			decoder := json.NewDecoder(r.Body)
+
+			var newReview model.Review
+			err := decoder.Decode(&newReview)
+
+			newReview.BeerID = ID
+
+			if err != nil {
+				w.WriteHeader(http.StatusBadRequest)
+				json.NewEncoder(w).Encode(http.StatusBadRequest)
+				fmt.Println("Bad beer - this will be a HTTP status code soon!")
+			} else {
+				Reviews = append(Reviews, newReview)
+				json.NewEncoder(w).Encode("New beer review added.")
+			}
+			return
+		}
+	}
+
+	w.WriteHeader(http.StatusNotFound)
+	json.NewEncoder(w).Encode("The beer selected for the review does not exist.")
 }
