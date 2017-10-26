@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/golang-bristol/beer-model"
 	"github.com/julienschmidt/httprouter"
@@ -12,7 +13,8 @@ import (
 // GetBeers returns the cellar
 func GetBeers(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(Cellar)
+	cellar, _ := db.FindBeer(model.Beer{})
+	json.NewEncoder(w).Encode(cellar)
 }
 
 // GetBeer returns a beer from the cellar
@@ -26,11 +28,10 @@ func GetBeer(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		return
 	}
 
-	for _, v := range Cellar {
-		if v.ID == ID {
-			json.NewEncoder(w).Encode(v)
-			return
-		}
+	cellar, _ := db.FindBeer(model.Beer{ID: ID})
+	if len(cellar) == 1 {
+		json.NewEncoder(w).Encode(cellar[0])
+		return
 	}
 
 	w.WriteHeader(http.StatusNotFound)
@@ -55,6 +56,7 @@ func AddBeer(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		json.NewEncoder(w).Encode(http.StatusBadRequest)
 		fmt.Println("Bad beer - this will be a HTTP status code soon!")
 	} else {
+		db.SaveBeer(newBeer)
 		json.NewEncoder(w).Encode("New beer added.")
 	}
 }

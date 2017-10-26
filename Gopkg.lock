@@ -8,14 +8,26 @@
   revision = "ecec0de6b9cc77b955a8caafaf1fe879495bcd53"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/jcelliott/lumber"
+  packages = ["."]
+  revision = "dd349441af25132d146d7095c6693a15431fc9b1"
+
+[[projects]]
   name = "github.com/julienschmidt/httprouter"
   packages = ["."]
   revision = "8c199fb6259ffc1af525cc3ad52ee60ba8359669"
   version = "v1.1"
 
+[[projects]]
+  branch = "master"
+  name = "github.com/nanobox-io/golang-scribble"
+  packages = ["."]
+  revision = "da3a159a462297745592fd615d4bcebec94b54c6"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "bd01ee6ce650d11b70571c990057ca57a1275ec0f41639f01f70bf7ee0adc21b"
+  inputs-digest = "f261b8b2e263e351790e0d6a4ef06e2f334b02fea3be1525644af07dbb1299cc"
   solver-name = "gps-cdcl"
   solver-version = 1

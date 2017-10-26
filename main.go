@@ -5,19 +5,22 @@ import (
 	"log"
 	"net/http"
 
-	model "github.com/golang-bristol/beer-model"
 	"github.com/julienschmidt/httprouter"
 )
 
-var (
-	// Cellar is the collection of beers
-	Cellar []model.Beer
-
-	// Reviews is the colletion of beer reviews
-	Reviews []model.Review
-)
+// db is an interface to interact with data on multiple type of data storage
+var db Storage
 
 func main() {
+	var err error
+
+	// TODO: Add configuration to select type of storage, file location or
+	// database connection.
+	db, err = newStorage(StorageTypeMemory)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	PopulateBeers()
 	PopulateReviews()
 
