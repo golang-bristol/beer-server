@@ -20,67 +20,50 @@ func newStorageMemory() (*StorageMemory, error) {
 	return stg, err
 }
 
-// SaveBeer insert or update a single beer
-func (s *StorageMemory) SaveBeer(beer model.Beer) error {
-	var err error
-
-	beers, err := s.FindBeer(model.Beer{ID: beer.ID})
-	if err != nil {
-		return err
-	}
-
-	if len(beers) == 1 {
-		*beers[0] = beer
-
-	} else if len(beers) > 1 {
-		return fmt.Errorf("can't update because found multiple entries with ID %d", beer.ID)
-	}
-
-	s.cellar = append(s.cellar, beer)
-	return err
-}
-
-// SaveReview insert or update a single review
-func (s *StorageMemory) SaveReview(review model.Review) error {
-	var err error
-
-	reviews, err := s.FindReview(model.Review{ID: review.ID})
-	if err != nil {
-		return err
-	}
-
-	if len(reviews) == 1 {
-		*reviews[0] = review
-
-	} else if len(reviews) > 1 {
-		return fmt.Errorf("can't update because found multiple entries with ID %d", review.ID)
-	}
-
-	s.reviews = append(s.reviews, review)
-
-	return err
-}
-
-// SaveBunchOfBeers insert or update a multiple beers
-func (s *StorageMemory) SaveBunchOfBeers(beers []model.Beer) error {
-	var err error
-
+// SaveBeer insert or update beers
+func (s *StorageMemory) SaveBeer(beers ...model.Beer) error {
 	for _, beer := range beers {
-		s.SaveBeer(beer)
+		var err error
+
+		beersFound, err := s.FindBeer(model.Beer{ID: beer.ID})
+		if err != nil {
+			return err
+		}
+
+		if len(beersFound) == 1 {
+			*beersFound[0] = beer
+
+		} else if len(beersFound) > 1 {
+			return fmt.Errorf("can't update because found multiple entries with ID %d", beer.ID)
+		}
+
+		s.cellar = append(s.cellar, beer)
 	}
 
-	return err
+	return nil
 }
 
-// SaveBunchOfReviews insert or update a multiple reviews
-func (s *StorageMemory) SaveBunchOfReviews(reviews []model.Review) error {
-	var err error
-
+// SaveReview insert or update reviews
+func (s *StorageMemory) SaveReview(reviews ...model.Review) error {
 	for _, review := range reviews {
-		s.SaveReview(review)
+		var err error
+
+		reviewsFound, err := s.FindReview(model.Review{ID: review.ID})
+		if err != nil {
+			return err
+		}
+
+		if len(reviewsFound) == 1 {
+			*reviewsFound[0] = review
+
+		} else if len(reviewsFound) > 1 {
+			return fmt.Errorf("can't update because found multiple entries with ID %d", review.ID)
+		}
+
+		s.reviews = append(s.reviews, review)
 	}
 
-	return err
+	return nil
 }
 
 // FindBeer locate full data set based on given criteria

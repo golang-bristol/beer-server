@@ -31,58 +31,56 @@ func newStorageJSON(location string) (*StorageJSON, error) {
 	return stg, nil
 }
 
-// SaveBeer insert or update a single beer
-func (s *StorageJSON) SaveBeer(beer model.Beer) error {
-	var err error
-	var resource = fmt.Sprintf("%d", beer.ID)
-
-	beers, err := s.FindBeer(model.Beer{ID: beer.ID})
-
-	if len(beers) > 0 {
-		s.db.Delete(collectionBeer, resource)
-	}
-
-	s.db.Write(collectionBeer, resource, beer)
-
-	return err
-}
-
-// SaveReview insert or update a single review
-func (s *StorageJSON) SaveReview(review model.Review) error {
-	var err error
-	var resource = fmt.Sprintf("%d", review.ID)
-
-	reviews, err := s.FindReview(model.Review{ID: review.ID})
-
-	if len(reviews) > 0 {
-		s.db.Delete(collectionReview, resource)
-	}
-
-	s.db.Write(collectionReview, resource, review)
-
-	return err
-}
-
-// SaveBunchOfBeers insert or update a multiple beers
-func (s *StorageJSON) SaveBunchOfBeers(beers []model.Beer) error {
-	var err error
-
+// SaveBeer insert or update beers
+func (s *StorageJSON) SaveBeer(beers ...model.Beer) error {
 	for _, beer := range beers {
-		s.SaveBeer(beer)
-	}
+		var err error
+		var resource = fmt.Sprintf("%d", beer.ID)
 
-	return err
+		beersFound, err := s.FindBeer(model.Beer{ID: beer.ID})
+		if err != nil {
+			return err
+		}
+
+		if len(beersFound) > 0 {
+			err = s.db.Delete(collectionBeer, resource)
+			if err != nil {
+				return err
+			}
+		}
+
+		err = s.db.Write(collectionBeer, resource, beer)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
-// SaveBunchOfReviews insert or update a multiple reviews
-func (s *StorageJSON) SaveBunchOfReviews(reviews []model.Review) error {
-	var err error
-
+// SaveReview insert or update reviews
+func (s *StorageJSON) SaveReview(reviews ...model.Review) error {
 	for _, review := range reviews {
-		s.SaveReview(review)
-	}
+		var err error
+		var resource = fmt.Sprintf("%d", review.ID)
 
-	return err
+		reviewsFound, err := s.FindReview(model.Review{ID: review.ID})
+		if err != nil {
+			return err
+		}
+
+		if len(reviewsFound) > 0 {
+			err = s.db.Delete(collectionReview, resource)
+			if err != nil {
+				return err
+			}
+		}
+
+		err = s.db.Write(collectionReview, resource, review)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 // FindBeer locate full data set based on given criteria

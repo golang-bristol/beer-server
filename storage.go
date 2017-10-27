@@ -14,10 +14,8 @@ const (
 
 // Storage represents all possible action available to deal with data
 type Storage interface {
-	SaveBeer(model.Beer) error
-	SaveReview(model.Review) error
-	SaveBunchOfBeers([]model.Beer) error
-	SaveBunchOfReviews([]model.Review) error
+	SaveBeer(...model.Beer) error
+	SaveReview(...model.Review) error
 	FindBeer(model.Beer) ([]*model.Beer, error)
 	FindReview(model.Review) ([]*model.Review, error)
 }
