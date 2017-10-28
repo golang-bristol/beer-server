@@ -66,6 +66,18 @@ func PopulateBeers() []model.Beer {
 				"smooth taste.",
 			Created: time.Date(2017, time.October, 24, 22, 27, 0, 0, time.UTC),
 		},
+		model.Beer{
+			ID:      6,
+			Name:    "Guinness Draught",
+			Brewery: "Guinness Ltd.",
+			Abv:     4,
+			ShortDesc: "Pours dark brown, almost black with solid lasting light brown head. " +
+				"Aroma of bitter cocoa, light coffee and roasted malt. " +
+				"Body is light sweet, medium bitter. " +
+				"Body is light to medium, texture almost thin and carbonation average. " +
+				"Finish is medium bitter cocoa with more pronounced roast flavor. Smooth drinker.",
+			Created: time.Date(2017, time.October, 24, 22, 27, 0, 0, time.UTC),
+		},
 	}
 }
 
