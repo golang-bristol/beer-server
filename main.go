@@ -10,8 +10,9 @@ import (
 
 // db is an interface to interact with data on multiple type of data storage
 var db Storage
+var router *httprouter.Router
 
-func main() {
+func init() {
 	var err error
 
 	// TODO: Add configuration to select type of storage, file location or
@@ -24,7 +25,7 @@ func main() {
 	PopulateBeers()
 	PopulateReviews()
 
-	router := httprouter.New()
+	router = httprouter.New()
 
 	router.GET("/beers", GetBeers)
 	router.GET("/beers/:id", GetBeer)
@@ -32,7 +33,9 @@ func main() {
 
 	router.POST("/beers", AddBeer)
 	router.POST("/beers/:id/reviews", AddBeerReview)
+}
 
+func main() {
 	fmt.Println("The beer server is on tap now.")
 	log.Fatal(http.ListenAndServe(":8080", router))
 }

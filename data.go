@@ -70,13 +70,53 @@ func PopulateBeers() {
 			ID:      6,
 			Name:    "Guinness Draught",
 			Brewery: "Guinness Ltd.",
-			Abv:     4.2,
-			ShortDesc: "Pours dark brown, almost black with solid lasting light brown head. "+
-			"Aroma of bitter cocoa, light coffee and roasted malt. " + 
-			"Body is light sweet, medium bitter. " +
-			"Body is light to medium, texture almost thin and carbonation average. " +
-			"Finish is medium bitter cocoa with more pronounced roast flavor. Smooth drinker.",
+			Abv:     4,
+			ShortDesc: "Pours dark brown, almost black with solid lasting light brown head. " +
+				"Aroma of bitter cocoa, light coffee and roasted malt. " +
+				"Body is light sweet, medium bitter. " +
+				"Body is light to medium, texture almost thin and carbonation average. " +
+				"Finish is medium bitter cocoa with more pronounced roast flavor. Smooth drinker.",
 			Created: time.Date(2017, time.October, 24, 22, 27, 0, 0, time.UTC),
+		},
+		model.Beer{
+			ID:      7,
+			Name:    "XX Lager",
+			Brewery: "Cuahutemoc Moctezuma",
+			Abv:     4.2,
+			ShortDesc: "A crisp, refreshing, light-bodied malt-flavored beer with a well-balanced finish. " +
+				"A Lager that drinks like a Pilsner. A liquid embodiment of living life to the fullest. " +
+				"A beverage made from pure spring water and the choicest hops. A beer with such good taste, it’s chosen you to drink it.",
+			Created: time.Date(2017, time.October, 28, 15, 02, 0, 0, time.UTC),
+		},
+		model.Beer{
+			ID:      8,
+			Name:    "Tecate",
+			Brewery: "Cuahutemoc Moctezuma",
+			Abv:     5,
+			ShortDesc: "Very smooth, medium bodied brew. Malt sweetness is thin, and can be likened to diluted sugar water. " +
+				"Touch of fructose-like sweetness. Light citric hop flavours gently prick the palate with tea-like notes that follow and fade quickly. " +
+				"Finishes a bit dry with husk tannins and a pasty mouthfeel.",
+			Created: time.Date(2017, time.October, 28, 15, 07, 0, 0, time.UTC),
+		},
+		model.Beer{
+			ID:      9,
+			Name:    "Sol",
+			Brewery: "Cuahutemoc Moctezuma",
+			Abv:     5,
+			ShortDesc: "While Corona wins the marketing wars in the U.S., Sol is the winning brand in much of Mexico, despite not being a standout in any respect. " +
+				"You see the logo plastered everywhere and it’s seemingly on every restaurant and bar menu. Like Corona, it’s simple and inoffensive, " +
+				"but still slightly more flavorful than your typical American macrobrew. At its best ice cold, and progressively worse as it gets warmer.",
+			Created: time.Date(2017, time.October, 28, 15, 12, 0, 0, time.UTC),
+		},
+		model.Beer{
+			ID:      10,
+			Name:    "Corona",
+			Brewery: "Cuahutemoc Moctezuma",
+			Abv:     5,
+			ShortDesc: "One of the five best-selling beers in the world, but it usually tastes better in Mexico, " +
+				"where the bottles don’t have so much time in transit and on shelves. (Sunlight coming through clear bottles is never a good thing for beer.) " +
+				"This is the typical “drink all afternoon” beer, working well on its own or with a plate of tacos. Refreshing with a lime.",
+			Created: time.Date(2017, time.October, 28, 15, 14, 0, 0, time.UTC),
 		},
 	}
 	db.SaveBeer(defaultBeers...)
