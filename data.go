@@ -7,8 +7,8 @@ import (
 )
 
 // PopulateBeers populates the Cellar variable with Beers
-func PopulateBeers() {
-	Cellar = []model.Beer{
+func PopulateBeers() []model.Beer {
+	return []model.Beer{
 		model.Beer{
 			ID:      1,
 			Name:    "Pliny the Elder",
@@ -70,12 +70,12 @@ func PopulateBeers() {
 			ID:      6,
 			Name:    "Guinness Draught",
 			Brewery: "Guinness Ltd.",
-			Abv:     4.2,
-			ShortDesc: "Pours dark brown, almost black with solid lasting light brown head. "+
-			"Aroma of bitter cocoa, light coffee and roasted malt. " + 
-			"Body is light sweet, medium bitter. " +
-			"Body is light to medium, texture almost thin and carbonation average. " +
-			"Finish is medium bitter cocoa with more pronounced roast flavor. Smooth drinker.",
+			Abv:     4,
+			ShortDesc: "Pours dark brown, almost black with solid lasting light brown head. " +
+				"Aroma of bitter cocoa, light coffee and roasted malt. " +
+				"Body is light sweet, medium bitter. " +
+				"Body is light to medium, texture almost thin and carbonation average. " +
+				"Finish is medium bitter cocoa with more pronounced roast flavor. Smooth drinker.",
 			Created: time.Date(2017, time.October, 24, 22, 27, 0, 0, time.UTC),
 		},
 		model.Beer{
@@ -122,8 +122,8 @@ func PopulateBeers() {
 }
 
 // PopulateReviews populates the Reviews variable with Reviews
-func PopulateReviews() {
-	Reviews = []model.Review{
+func PopulateReviews() []model.Review {
+	return []model.Review{
 		model.Review{ID: 1, BeerID: 1, FirstName: "Joe", LastName: "Tribiani", Score: 5, Text: "This is good but this is not pizza!", Created: time.Date(2017, time.November, 10, 12, 36, 0, 0, time.UTC)},
 		model.Review{ID: 2, BeerID: 2, FirstName: "Chandler", LastName: "Bing", Score: 1, Text: "I would SO NOT drink this ever again.", Created: time.Date(2017, time.October, 25, 5, 55, 0, 0, time.UTC)},
 		model.Review{ID: 3, BeerID: 1, FirstName: "Ross", LastName: "Geller", Score: 4, Text: "Drank while on a break, was pretty good!", Created: time.Date(2017, time.October, 25, 12, 3, 0, 0, time.UTC)},

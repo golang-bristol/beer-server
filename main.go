@@ -10,6 +10,8 @@ import (
 )
 
 var (
+	router *httprouter.Router
+
 	// Cellar is the collection of beers
 	Cellar []model.Beer
 
@@ -17,11 +19,11 @@ var (
 	Reviews []model.Review
 )
 
-func main() {
-	PopulateBeers()
-	PopulateReviews()
+func init() {
+	Cellar = PopulateBeers()
+	Reviews = PopulateReviews()
 
-	router := httprouter.New()
+	router = httprouter.New()
 
 	router.GET("/beers", GetBeers)
 	router.GET("/beers/:id", GetBeer)
@@ -29,7 +31,9 @@ func main() {
 
 	router.POST("/beers", AddBeer)
 	router.POST("/beers/:id/reviews", AddBeerReview)
+}
 
+func main() {
 	fmt.Println("The beer server is on tap now.")
 	log.Fatal(http.ListenAndServe(":8080", router))
 }
