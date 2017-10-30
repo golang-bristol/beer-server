@@ -73,6 +73,32 @@ func AddBeer(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 }
 
 // AddBeerReview adds a new review for a beer
-func AddBeerReview(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	// TODO
+func AddBeerReview(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	ID, err := strconv.Atoi(ps.ByName("id"))
+	if err != nil {
+		http.Error(w, fmt.Sprintf("%s is not a valid Beer ID, it must be a number.", ps.ByName("id")), http.StatusBadRequest)
+		return
+	}
+
+	for _, v := range Cellar {
+		if v.ID == ID {
+			var newReview model.Review
+
+			decoder := json.NewDecoder(r.Body)
+			err := decoder.Decode(&newReview)
+
+			if err != nil {
+				http.Error(w, "Failed to parse review", http.StatusBadRequest)
+
+			} else {
+				newReview.BeerID = ID
+				Reviews = append(Reviews, newReview)
+				w.Header().Set("Content-Type", "application/json")
+				json.NewEncoder(w).Encode("New beer review added.")
+			}
+			return
+		}
+	}
+
+	http.Error(w, "The beer selected for the review does not exist.", http.StatusBadRequest)
 }
