@@ -4,34 +4,38 @@ import (
 	model "github.com/golang-bristol/beer-model"
 )
 
-const (
-	// StorageTypeJSON is json type indicator
-	StorageTypeJSON = "JSON" // storage_json.go
+// StorageType defines available storage types
+type StorageType int
 
-	// StorageTypeMemory will store data in memory
-	StorageTypeMemory = "Memory" // storage_mem.go
+const (
+	// JSON will store data in JSON files saved on disk
+	JSON StorageType = iota
+	// Memory will store data in memory
+	Memory
 )
 
-// Storage represents all possible action available to deal with data
+// Storage represents all possible actions available to deal with data
 type Storage interface {
 	SaveBeer(...model.Beer) error
 	SaveReview(...model.Review) error
 	FindBeer(model.Beer) ([]*model.Beer, error)
 	FindReview(model.Review) ([]*model.Review, error)
+	FindBeers() []*model.Beer
+	FindReviews() []*model.Review
 }
 
-func newStorage(storageType string) (Storage, error) {
+func newStorage(storageType StorageType) (Storage, error) {
 	var stg Storage
 	var err error
 
 	switch storageType {
-	case StorageTypeMemory:
-		stg, err = newStorageMemory()
+	case Memory:
+		stg = new(StorageMemory)
 
-	case StorageTypeJSON:
+	case JSON:
 		// TODO: configuration setup - For the moment storage location for
 		// JSON files is current working directory.
-		stg, err = newStorageJSON("./")
+		stg, err = newStorageJSON("./data/")
 	}
 
 	return stg, err

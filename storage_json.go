@@ -3,20 +3,23 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"strconv"
 
 	model "github.com/golang-bristol/beer-model"
 	"github.com/nanobox-io/golang-scribble"
+)
+
+const (
+	// CollectionBeer identifier for JSON collection about beers
+	CollectionBeer int = iota
+	// CollectionReview identifier for JSON collection about reviews
+	CollectionReview
 )
 
 // StorageJSON is the data storage type using JSON file
 type StorageJSON struct {
 	db *scribble.Driver
 }
-
-var (
-	collectionBeer   = "beers"
-	collectionReview = "reviews"
-)
 
 func newStorageJSON(location string) (*StorageJSON, error) {
 	var err error
@@ -31,52 +34,62 @@ func newStorageJSON(location string) (*StorageJSON, error) {
 	return stg, nil
 }
 
-// SaveBeer insert or update beers
+// SaveBeer insert new beers
 func (s *StorageJSON) SaveBeer(beers ...model.Beer) error {
 	for _, beer := range beers {
-		var err error
-		var resource = fmt.Sprintf("%d", beer.ID)
+		var resource = strconv.Itoa(beer.ID)
+		var collection = strconv.Itoa(CollectionBeer)
 
-		beersFound, err := s.FindBeer(model.Beer{ID: beer.ID})
-		if err != nil {
-			return err
-		}
-
-		if len(beersFound) > 0 {
-			err = s.db.Delete(collectionBeer, resource)
-			if err != nil {
-				return err
+		allBeers := s.FindBeers()
+		for _, b := range allBeers {
+			if beer.Abv == b.Abv &&
+				beer.Brewery == b.Brewery &&
+				beer.Name == b.Name {
+				return fmt.Errorf("Beer already exists")
 			}
 		}
 
-		err = s.db.Write(collectionBeer, resource, beer)
-		if err != nil {
+		// TODO: Since delete function has not been implemented yet
+		// I think we can assume size of beers should always increase.
+		beer.ID = len(allBeers) + 1
+
+		if err := s.db.Write(collection, resource, beer); err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
-// SaveReview insert or update reviews
+// SaveReview insert reviews
 func (s *StorageJSON) SaveReview(reviews ...model.Review) error {
 	for _, review := range reviews {
-		var err error
-		var resource = fmt.Sprintf("%d", review.ID)
+		var resource = strconv.Itoa(review.ID)
+		var collection = strconv.Itoa(CollectionReview)
 
-		reviewsFound, err := s.FindReview(model.Review{ID: review.ID})
+		beerFound, err := s.FindBeer(model.Beer{ID: review.BeerID})
 		if err != nil {
 			return err
 		}
 
-		if len(reviewsFound) > 0 {
-			err = s.db.Delete(collectionReview, resource)
-			if err != nil {
-				return err
+		if len(beerFound) == 0 {
+			return fmt.Errorf("The beer selected for the review does not exist")
+		}
+
+		allReviews := s.FindReviews()
+		for _, r := range allReviews {
+			if review.BeerID == r.BeerID &&
+				review.FirstName == r.FirstName &&
+				review.LastName == r.LastName &&
+				review.Text == r.Text {
+				return fmt.Errorf("Review already exists")
 			}
 		}
 
-		err = s.db.Write(collectionReview, resource, review)
-		if err != nil {
+		// TODO: Since delete function has not been implemented yet
+		// I think we can assume size of reviews should always increase.
+		review.ID = len(allReviews) + 1
+
+		if err = s.db.Write(collection, resource, review); err != nil {
 			return err
 		}
 	}
@@ -86,34 +99,15 @@ func (s *StorageJSON) SaveReview(reviews ...model.Review) error {
 // FindBeer locate full data set based on given criteria
 func (s *StorageJSON) FindBeer(criteria model.Beer) ([]*model.Beer, error) {
 	var beers []*model.Beer
-	var blankBeer model.Beer
+	var beer model.Beer
+	var resource = strconv.Itoa(criteria.ID)
+	var collection = strconv.Itoa(CollectionBeer)
 
-	if criteria == blankBeer {
-		records, err := s.db.ReadAll(collectionBeer)
-		if err != nil {
-			return beers, err
-		}
-
-		for _, b := range records {
-			var beer model.Beer
-
-			if err := json.Unmarshal([]byte(b), &beer); err != nil {
-				return beers, err
-			}
-
-			beers = append(beers, &beer)
-		}
-
-	} else {
-		var beer model.Beer
-		resource := fmt.Sprintf("%d", criteria.ID)
-
-		if err := s.db.Read(collectionBeer, resource, &beer); err != nil {
-			return beers, err
-		}
-
-		beers = append(beers, &beer)
+	if err := s.db.Read(collection, resource, &beer); err != nil {
+		return beers, err
 	}
+
+	beers = append(beers, &beer)
 
 	return beers, nil
 }
@@ -121,34 +115,59 @@ func (s *StorageJSON) FindBeer(criteria model.Beer) ([]*model.Beer, error) {
 // FindReview locate full data set based on given criteria
 func (s *StorageJSON) FindReview(criteria model.Review) ([]*model.Review, error) {
 	var reviews []*model.Review
-	var blankReview model.Review
+	var review model.Review
+	var resource = strconv.Itoa(criteria.ID)
+	var collection = strconv.Itoa(CollectionReview)
 
-	if criteria == blankReview {
-		records, err := s.db.ReadAll(collectionReview)
-		if err != nil {
-			return reviews, err
+	if err := s.db.Read(collection, resource, &review); err != nil {
+		return reviews, err
+	}
+
+	reviews = append(reviews, &review)
+
+	return reviews, nil
+}
+
+func (s *StorageJSON) FindBeers() []*model.Beer {
+	var beers []*model.Beer
+	var collection = strconv.Itoa(CollectionBeer)
+
+	records, err := s.db.ReadAll(collection)
+	if err != nil {
+		return beers
+	}
+
+	for _, b := range records {
+		var beer model.Beer
+
+		if err := json.Unmarshal([]byte(b), &beer); err != nil {
+			return beers
 		}
 
-		for _, r := range records {
-			var review model.Review
+		beers = append(beers, &beer)
+	}
 
-			if err := json.Unmarshal([]byte(r), &review); err != nil {
-				return reviews, err
-			}
+	return beers
+}
 
-			reviews = append(reviews, &review)
-		}
+func (s *StorageJSON) FindReviews() []*model.Review {
+	var reviews []*model.Review
+	var collection = strconv.Itoa(CollectionReview)
 
-	} else {
+	records, err := s.db.ReadAll(collection)
+	if err != nil {
+		return reviews
+	}
+
+	for _, r := range records {
 		var review model.Review
-		resource := fmt.Sprintf("%d", criteria.ID)
 
-		if err := s.db.Read(collectionReview, resource, &review); err != nil {
-			return reviews, err
+		if err := json.Unmarshal([]byte(r), &review); err != nil {
+			return reviews
 		}
 
 		reviews = append(reviews, &review)
 	}
 
-	return reviews, nil
+	return reviews
 }

@@ -17,7 +17,7 @@ func init() {
 
 	// TODO: Add configuration to select type of storage, file location or
 	// database connection.
-	db, err = newStorage(StorageTypeMemory)
+	db, err = newStorage(Memory)
 	if err != nil {
 		log.Fatal(err)
 	}
