@@ -82,7 +82,7 @@ func PopulateBeers() {
 			ID:      7,
 			Name:    "XX Lager",
 			Brewery: "Cuahutemoc Moctezuma",
-			Abv:     4,
+			Abv:     4.2,
 			ShortDesc: "A crisp, refreshing, light-bodied malt-flavored beer with a well-balanced finish. " +
 				"A Lager that drinks like a Pilsner. A liquid embodiment of living life to the fullest. " +
 				"A beverage made from pure spring water and the choicest hops. A beer with such good taste, it’s chosen you to drink it.",
