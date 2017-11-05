@@ -14,7 +14,7 @@ import (
 
 func TestGetBeers(t *testing.T) {
 	var cellarFromRequest []model.Beer
-	var cellarFromStorage []*model.Beer
+	var cellarFromStorage []model.Beer
 
 	w := httptest.NewRecorder()
 	r, _ := http.NewRequest("GET", "/beers", nil)
@@ -36,7 +36,7 @@ func TestGetBeers(t *testing.T) {
 
 	var mapCellar = make(map[model.Beer]int, len(cellarFromStorage))
 	for _, beer := range cellarFromStorage {
-		mapCellar[*beer] = 1
+		mapCellar[beer] = 1
 	}
 
 	for _, beerResp := range cellarFromRequest {
@@ -103,7 +103,7 @@ func TestGetBeer(t *testing.T) {
 	var selectedBeer model.Beer
 	json.Unmarshal(w.Body.Bytes(), &selectedBeer)
 
-	if *cellar[choice] != selectedBeer {
+	if cellar[choice] != selectedBeer {
 		t.Errorf("Expected to match results with selected beer")
 		t.FailNow()
 	}

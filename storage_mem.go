@@ -80,23 +80,11 @@ func (s *StorageMemory) FindReview(criteria model.Review) ([]*model.Review, erro
 }
 
 // FindBeers return all beers
-func (s *StorageMemory) FindBeers() []*model.Beer {
-	var beers []*model.Beer
-
-	for idx := range s.cellar {
-		beers = append(beers, &s.cellar[idx])
-	}
-
-	return beers
+func (s *StorageMemory) FindBeers() []model.Beer {
+	return s.cellar
 }
 
 // FindReviews return all reviews
-func (s *StorageMemory) FindReviews() []*model.Review {
-	var reviews []*model.Review
-
-	for idx := range s.reviews {
-		reviews = append(reviews, &s.reviews[idx])
-	}
-
-	return reviews
+func (s *StorageMemory) FindReviews() []model.Review {
+	return s.reviews
 }

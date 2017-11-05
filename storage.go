@@ -20,8 +20,8 @@ type Storage interface {
 	SaveReview(...model.Review) error
 	FindBeer(model.Beer) ([]*model.Beer, error)
 	FindReview(model.Review) ([]*model.Review, error)
-	FindBeers() []*model.Beer
-	FindReviews() []*model.Review
+	FindBeers() []model.Beer
+	FindReviews() []model.Review
 }
 
 func newStorage(storageType StorageType) (Storage, error) {

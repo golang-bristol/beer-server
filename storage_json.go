@@ -128,8 +128,8 @@ func (s *StorageJSON) FindReview(criteria model.Review) ([]*model.Review, error)
 	return reviews, nil
 }
 
-func (s *StorageJSON) FindBeers() []*model.Beer {
-	var beers []*model.Beer
+func (s *StorageJSON) FindBeers() []model.Beer {
+	var beers []model.Beer
 	var collection = strconv.Itoa(CollectionBeer)
 
 	records, err := s.db.ReadAll(collection)
@@ -144,14 +144,14 @@ func (s *StorageJSON) FindBeers() []*model.Beer {
 			return beers
 		}
 
-		beers = append(beers, &beer)
+		beers = append(beers, beer)
 	}
 
 	return beers
 }
 
-func (s *StorageJSON) FindReviews() []*model.Review {
-	var reviews []*model.Review
+func (s *StorageJSON) FindReviews() []model.Review {
+	var reviews []model.Review
 	var collection = strconv.Itoa(CollectionReview)
 
 	records, err := s.db.ReadAll(collection)
@@ -166,7 +166,7 @@ func (s *StorageJSON) FindReviews() []*model.Review {
 			return reviews
 		}
 
-		reviews = append(reviews, &review)
+		reviews = append(reviews, review)
 	}
 
 	return reviews
