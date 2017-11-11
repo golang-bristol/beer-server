@@ -7,8 +7,8 @@ import (
 )
 
 // PopulateBeers populates the Cellar variable with Beers
-func PopulateBeers() []model.Beer {
-	return []model.Beer{
+func PopulateBeers() {
+	defaultBeers := []model.Beer{
 		model.Beer{
 			ID:      1,
 			Name:    "Pliny the Elder",
@@ -79,51 +79,52 @@ func PopulateBeers() []model.Beer {
 			Created: time.Date(2017, time.October, 24, 22, 27, 0, 0, time.UTC),
 		},
 		model.Beer{
-			ID: 	 7,
-			Name:	 "XX Lager",
+			ID:      7,
+			Name:    "XX Lager",
 			Brewery: "Cuahutemoc Moctezuma",
-			Abv: 4.2,
+			Abv:     4.2,
 			ShortDesc: "A crisp, refreshing, light-bodied malt-flavored beer with a well-balanced finish. " +
-			"A Lager that drinks like a Pilsner. A liquid embodiment of living life to the fullest. " + 
-			"A beverage made from pure spring water and the choicest hops. A beer with such good taste, it’s chosen you to drink it.",
-			Created: time.Date(2017, time.October, 28, 15, 02, 0, 0 time.UTC),
+				"A Lager that drinks like a Pilsner. A liquid embodiment of living life to the fullest. " +
+				"A beverage made from pure spring water and the choicest hops. A beer with such good taste, it’s chosen you to drink it.",
+			Created: time.Date(2017, time.October, 28, 15, 02, 0, 0, time.UTC),
 		},
 		model.Beer{
-			ID: 	 8,
+			ID:      8,
 			Name:    "Tecate",
 			Brewery: "Cuahutemoc Moctezuma",
 			Abv:     5,
 			ShortDesc: "Very smooth, medium bodied brew. Malt sweetness is thin, and can be likened to diluted sugar water. " +
-			"Touch of fructose-like sweetness. Light citric hop flavours gently prick the palate with tea-like notes that follow and fade quickly. " + 
-			"Finishes a bit dry with husk tannins and a pasty mouthfeel.",
-			Created: time.Date(2017, time.October, 28, 15, 07, 0, 0 time.UTC),	
+				"Touch of fructose-like sweetness. Light citric hop flavours gently prick the palate with tea-like notes that follow and fade quickly. " +
+				"Finishes a bit dry with husk tannins and a pasty mouthfeel.",
+			Created: time.Date(2017, time.October, 28, 15, 07, 0, 0, time.UTC),
 		},
 		model.Beer{
-			ID:		 9,
-			Name: 	 "Sol",
+			ID:      9,
+			Name:    "Sol",
 			Brewery: "Cuahutemoc Moctezuma",
-			Abv: 	 5,
+			Abv:     5,
 			ShortDesc: "While Corona wins the marketing wars in the U.S., Sol is the winning brand in much of Mexico, despite not being a standout in any respect. " +
-			"You see the logo plastered everywhere and it’s seemingly on every restaurant and bar menu. Like Corona, it’s simple and inoffensive, " + 
-			"but still slightly more flavorful than your typical American macrobrew. At its best ice cold, and progressively worse as it gets warmer.",
-			Created: time.Date(2017, time.October, 28, 15, 12, 0, 0 time.UTC),
+				"You see the logo plastered everywhere and it’s seemingly on every restaurant and bar menu. Like Corona, it’s simple and inoffensive, " +
+				"but still slightly more flavorful than your typical American macrobrew. At its best ice cold, and progressively worse as it gets warmer.",
+			Created: time.Date(2017, time.October, 28, 15, 12, 0, 0, time.UTC),
 		},
 		model.Beer{
-			ID:		 10,
-			Name: 	 "Corona",
+			ID:      10,
+			Name:    "Corona",
 			Brewery: "Cuahutemoc Moctezuma",
-			Abv: 	 5,
-			ShortDesc: "One of the five best-selling beers in the world, but it usually tastes better in Mexico, " + 
-			"where the bottles don’t have so much time in transit and on shelves. (Sunlight coming through clear bottles is never a good thing for beer.) " +
-			"This is the typical “drink all afternoon” beer, working well on its own or with a plate of tacos. Refreshing with a lime."
-			Created: time.Date(2017, time.October, 28, 15, 14, 0, 0 time.UTC),			
-		}
+			Abv:     5,
+			ShortDesc: "One of the five best-selling beers in the world, but it usually tastes better in Mexico, " +
+				"where the bottles don’t have so much time in transit and on shelves. (Sunlight coming through clear bottles is never a good thing for beer.) " +
+				"This is the typical “drink all afternoon” beer, working well on its own or with a plate of tacos. Refreshing with a lime.",
+			Created: time.Date(2017, time.October, 28, 15, 14, 0, 0, time.UTC),
+		},
 	}
+	db.SaveBeer(defaultBeers...)
 }
 
 // PopulateReviews populates the Reviews variable with Reviews
-func PopulateReviews() []model.Review {
-	return []model.Review{
+func PopulateReviews() {
+	defaultReviews := []model.Review{
 		model.Review{ID: 1, BeerID: 1, FirstName: "Joe", LastName: "Tribiani", Score: 5, Text: "This is good but this is not pizza!", Created: time.Date(2017, time.November, 10, 12, 36, 0, 0, time.UTC)},
 		model.Review{ID: 2, BeerID: 2, FirstName: "Chandler", LastName: "Bing", Score: 1, Text: "I would SO NOT drink this ever again.", Created: time.Date(2017, time.October, 25, 5, 55, 0, 0, time.UTC)},
 		model.Review{ID: 3, BeerID: 1, FirstName: "Ross", LastName: "Geller", Score: 4, Text: "Drank while on a break, was pretty good!", Created: time.Date(2017, time.October, 25, 12, 3, 0, 0, time.UTC)},
@@ -131,4 +132,5 @@ func PopulateReviews() []model.Review {
 		model.Review{ID: 5, BeerID: 1, FirstName: "Monica", LastName: "Geller", Score: 5, Text: "AMAZING! Like Chandler's jokes!", Created: time.Date(2017, time.October, 22, 13, 41, 0, 0, time.UTC)},
 		model.Review{ID: 6, BeerID: 2, FirstName: "Rachel", LastName: "Green", Score: 5, Text: "So yummy, just like my beef and custard trifle.", Created: time.Date(2017, time.October, 17, 9, 12, 0, 0, time.UTC)},
 	}
+	db.SaveReview(defaultReviews...)
 }

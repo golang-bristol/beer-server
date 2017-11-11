@@ -13,7 +13,8 @@ import (
 // GetBeers returns the cellar
 func GetBeers(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(Cellar)
+	cellar := db.FindBeers()
+	json.NewEncoder(w).Encode(cellar)
 }
 
 // GetBeer returns a beer from the cellar
@@ -24,12 +25,11 @@ func GetBeer(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		return
 	}
 
-	for _, v := range Cellar {
-		if v.ID == ID {
-			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(v)
-			return
-		}
+	cellar, _ := db.FindBeer(model.Beer{ID: ID})
+	if len(cellar) == 1 {
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(cellar[0])
+		return
 	}
 
 	http.Error(w, "The beer you requested does not exist.", http.StatusNotFound)
@@ -46,13 +46,7 @@ func GetBeerReviews(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 	// TODO: Consider checking if a beer matching the ID actually exists, and
 	// 404 if that is not the case.
 
-	results := []model.Review{}
-	for _, v := range Reviews {
-		if v.BeerID == ID {
-			results = append(results, v)
-		}
-	}
-
+	results, _ := db.FindReview(model.Review{BeerID: ID})
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(results)
 }
@@ -68,7 +62,7 @@ func AddBeer(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		return
 	}
 
-	Cellar = append(Cellar, newBeer)
+	db.SaveBeer(newBeer)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode("New beer added.")
 }
@@ -81,25 +75,18 @@ func AddBeerReview(w http.ResponseWriter, r *http.Request, ps httprouter.Params)
 		return
 	}
 
-	for _, v := range Cellar {
-		if v.ID == ID {
-			var newReview model.Review
+	var newReview model.Review
+	decoder := json.NewDecoder(r.Body)
 
-			decoder := json.NewDecoder(r.Body)
-			err := decoder.Decode(&newReview)
-
-			if err != nil {
-				http.Error(w, "Failed to parse review", http.StatusBadRequest)
-
-			} else {
-				newReview.BeerID = ID
-				Reviews = append(Reviews, newReview)
-				w.Header().Set("Content-Type", "application/json")
-				json.NewEncoder(w).Encode("New beer review added.")
-			}
-			return
-		}
+	if err := decoder.Decode(&newReview); err != nil {
+		http.Error(w, "Failed to parse review", http.StatusBadRequest)
 	}
 
-	http.Error(w, "The beer selected for the review does not exist.", http.StatusBadRequest)
+	newReview.BeerID = ID
+	if err := db.SaveReview(newReview); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode("New beer review added.")
+
 }
