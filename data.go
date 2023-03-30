@@ -2,6 +2,8 @@ package main
 
 import (
 	"time"
+	
+	"github.com/golang-bristol/beer-model"
 )
 
 // PopulateBeers populates the Cellar variable with Beers
