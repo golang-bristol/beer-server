@@ -2,8 +2,6 @@ package main
 
 import (
 	"time"
-
-	"github.com/golang-bristol/beer-model"
 )
 
 // PopulateBeers populates the Cellar variable with Beers
@@ -118,6 +116,30 @@ func PopulateBeers() {
 				"This is the typical “drink all afternoon” beer, working well on its own or with a plate of tacos. Refreshing with a lime.",
 			Created: time.Date(2017, time.October, 28, 15, 14, 0, 0, time.UTC),
 		},
+		model.Beer{
+			ID:        11,
+			Name:      "La Fin Du Monde",
+			Brewery:   "Unibroue",
+			Abv:       9,
+			ShortDesc: "This beer features a unique yeast strain that creates a complex flavor profile including banana, clove, and citrus notes. The high ABV is well balanced and makes for a smooth finish.",
+			Created:   time.Date(2022, time.January, 2, 18, 24, 0, 0, time.UTC),
+		},
+		model.Beer{
+			ID:        12,
+			Name:      "Hazy Little Thing",
+			Brewery:   "Sierra Nevada Brewing Co.",
+			Abv:       6.7,
+			ShortDesc: "This hazy IPA has a juicy and tropical flavor profile thanks to the use of Mosaic, Citra, and El Dorado hops. It has a smooth mouthfeel and a slightly sweet finish.",
+			Created:   time.Date(2022, time.February, 15, 10, 15, 0, 0, time.UTC),
+		},
+		model.Beer{
+			ID:        13,
+			Name:      "Dead Guy Ale",
+			Brewery:   "Rogue Ales",
+			Abv:       6.5,
+			ShortDesc: "This German-style Maibock has a deep copper color and a rich malt flavor. It is balanced by the use of Perle and Saaz hops, which give it a slightly spicy and floral aroma.",
+			Created:   time.Date(2022, time.March, 5, 14, 7, 0, 0, time.UTC),
+		},
 	}
 	db.SaveBeer(defaultBeers...)
 }
@@ -131,6 +153,10 @@ func PopulateReviews() {
 		model.Review{ID: 4, BeerID: 2, FirstName: "Phoebe", LastName: "Buffay", Score: 2, Text: "Wasn't that great, so I gave it to my smelly cat.", Created: time.Date(2017, time.October, 21, 16, 45, 0, 0, time.UTC)},
 		model.Review{ID: 5, BeerID: 1, FirstName: "Monica", LastName: "Geller", Score: 5, Text: "AMAZING! Like Chandler's jokes!", Created: time.Date(2017, time.October, 22, 13, 41, 0, 0, time.UTC)},
 		model.Review{ID: 6, BeerID: 2, FirstName: "Rachel", LastName: "Green", Score: 5, Text: "So yummy, just like my beef and custard trifle.", Created: time.Date(2017, time.October, 17, 9, 12, 0, 0, time.UTC)},
+		model.Review{ID: 7, BeerID: 3, FirstName: "Janice", LastName: "Litman-Goralnik", Score: 4, Text: "This beer has a really unique smoky flavor that I enjoyed. It's not for everyone, but I would definitely drink it again.", Created: time.Date(2022, time.January, 12, 9, 46, 0, 0, time.UTC)},
+		model.Review{ID: 8, BeerID: 12, FirstName: "Joey", LastName: "Tribiani", Score: 5, Text: "Oh my god, this beer is so good! I could drink this all day, every day. It's like drinking a tropical vacation.", Created: time.Date(2022, time.February, 28, 16, 30, 0, 0, time.UTC)},
+		model.Review{ID: 9, BeerID: 11, FirstName: "Rachel", LastName: "Green", Score: 4, Text: "This beer has a really interesting flavor profile. I'm not sure I loved it, but it was definitely worth trying.", Created: time.Date(2022, time.March, 8, 11, 17, 0, 0, time.UTC)},
+		model.Review{ID: 10, BeerID: 13, FirstName: "Monica", LastName: "Geller", Score: 3, Text: "I didn't love this beer, but it was decent. It had a nice malt flavor but I wish it had been a bit hoppier.", Created: time.Date(2022, time.March, 15, 14, 52, 0, 0, time.UTC)},
 	}
 	db.SaveReview(defaultReviews...)
 }
